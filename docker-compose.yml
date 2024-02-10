@@ -1,0 +1,31 @@
+services:
+  vscode-server:
+    container_name: vscode-server
+    image: lscr.io/linuxserver/code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Kolkata
+      - DEFAULT_WORKSPACE=/config/workspace
+    ports:
+      - '8443:8443'
+    restart: always
+    volumes:
+      - '/home/pi/vscode-config:/config'
+      - '/home/pi:/config/workspace'
+  
+  tor-proxy:
+    image: "dperson/torproxy:latest"
+    restart: always
+    ports:
+      - "9050:9050"
+      - "9051:9051"
+      - "8118:8118"
+    environment:
+      TORUSER: 'crunchbase'
+      TOR_NewCircuitPeriod: 2000
+      EXITNODE: 1
+      BW: 1000000
+      PASSWORD: 'admin'
+
+version: '2.4'
